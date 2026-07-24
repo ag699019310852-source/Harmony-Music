@@ -10,12 +10,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Enable Windows Developer Mode
+      - name: Enable Windows Developer Mode & Symlinks
         run: |
           New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWORD -Force
+          git config --global core.symlinks true
 
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Java
         uses: actions/setup-java@v4
