@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Enable Symlinks and Developer Mode
+      - name: Enable Windows Developer Mode and Symlinks
         run: |
           git config --global core.symlinks true
           New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWORD -Force
@@ -26,15 +26,18 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter (Compatible Version)
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.9'
           channel: 'stable'
-          cache: true
+          cache: false
 
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
+
+      - name: Clean Previous Builds
+        run: flutter clean
 
       - name: Install Dependencies
         run: flutter pub get
