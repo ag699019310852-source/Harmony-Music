@@ -1,3 +1,4 @@
+
 name: Build Windows App
 
 on:
@@ -10,6 +11,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Enable Developer Mode in Windows Runner
+        run: |
+          reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -19,9 +24,10 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
+      - name: Setup Flutter (Compatible Version 3.16.9)
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.16.9'
           channel: 'stable'
           cache: true
 
