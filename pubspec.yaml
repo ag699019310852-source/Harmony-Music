@@ -132,3 +132,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+dependency_overrides:
+  ionicons: 0.2.1
+  share_plus: 7.2.2
