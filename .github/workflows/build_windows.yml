@@ -1,4 +1,3 @@
-
 name: Build Windows App
 
 on:
@@ -11,9 +10,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Enable Developer Mode in Windows Runner
+      - name: Enable Windows Developer Mode
         run: |
-          reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f /v "AllowDevelopmentWithoutDevLicense" /d "1"
+          New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWORD -Force
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,23 +23,23 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter (Compatible Version 3.16.9)
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.9'
           channel: 'stable'
           cache: true
 
-      - name: Enable Windows Desktop Support
+      - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
 
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Windows Executable
+      - name: Build Windows App
         run: flutter build windows --release
 
-      - name: Upload Windows Build Artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: HarmonyMusic-Windows-Release
