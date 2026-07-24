@@ -10,10 +10,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Enable Windows Developer Mode & Symlinks
+      - name: Enable Symlinks and Developer Mode
         run: |
-          New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWORD -Force
           git config --global core.symlinks true
+          New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name 'AllowDevelopmentWithoutDevLicense' -Value 1 -PropertyType DWORD -Force
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,9 +26,10 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
+      - name: Setup Flutter (Compatible Version)
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.16.9'
           channel: 'stable'
           cache: true
 
@@ -38,10 +39,10 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Windows App
+      - name: Build Windows Executable
         run: flutter build windows --release
 
-      - name: Upload Build Artifact
+      - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: HarmonyMusic-Windows-Release
